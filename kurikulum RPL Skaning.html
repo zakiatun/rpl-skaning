@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurikulum Internal & ATP RPL - SMK Kurikulum Merdeka</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        indigoBrand: {
+                            50: '#eef2ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-full { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+
+    <div id="app" class="flex-grow flex flex-col">
+        
+        <!-- Header / Navigation Bar -->
+        <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50 shadow-sm no-print">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="px-3 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-indigo-600 flex items-center justify-center text-white font-black text-xs tracking-wider shadow-md uppercase">
+                        SKANING
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-slate-900 dark:text-white text-base sm:text-lg leading-tight">Kurikulum & ATP RPL</h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">SMKN 1 Air Naningan</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <button @click="activeTab = 'overview'" :class="activeTab === 'overview' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 font-semibold' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" class="px-3 py-2 rounded-lg text-sm transition">
+                        Dashboard
+                    </button>
+                    <button @click="activeTab = 'roadmap'" :class="activeTab === 'roadmap' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 font-semibold' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" class="px-3 py-2 rounded-lg text-sm transition">
+                        Alur ATP Semester
+                    </button>
+                    <button @click="activeTab = 'cp-mapping'" :class="activeTab === 'cp-mapping' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 font-semibold' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" class="px-3 py-2 rounded-lg text-sm transition">
+                        Matriks CP Resmi
+                    </button>
+                    <button @click="activeTab = 'ukk-drill'" :class="activeTab === 'ukk-drill' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 font-semibold' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'" class="px-3 py-2 rounded-lg text-sm transition">
+                        Kesiapan UKK
+                    </button>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-2">
+                    <button @click="toggleDarkMode" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700">
+                        <svg v-if="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Nav Bar -->
+            <div class="md:hidden flex border-t border-slate-200 dark:border-slate-700 overflow-x-auto px-2 py-1 gap-1 text-xs no-print">
+                <button @click="activeTab = 'overview'" :class="activeTab === 'overview' ? 'bg-emerald-600 text-white font-medium' : 'text-slate-600 dark:text-slate-300'" class="px-3 py-1.5 rounded-md whitespace-nowrap">Dashboard</button>
+                <button @click="activeTab = 'roadmap'" :class="activeTab === 'roadmap' ? 'bg-emerald-600 text-white font-medium' : 'text-slate-600 dark:text-slate-300'" class="px-3 py-1.5 rounded-md whitespace-nowrap">ATP Semester</button>
+                <button @click="activeTab = 'cp-mapping'" :class="activeTab === 'cp-mapping' ? 'bg-emerald-600 text-white font-medium' : 'text-slate-600 dark:text-slate-300'" class="px-3 py-1.5 rounded-md whitespace-nowrap">Matriks CP</button>
+                <button @click="activeTab = 'ukk-drill'" :class="activeTab === 'ukk-drill' ? 'bg-emerald-600 text-white font-medium' : 'text-slate-600 dark:text-slate-300'" class="px-3 py-1.5 rounded-md whitespace-nowrap">Kesiapan UKK</button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 print-full">
+
+            <!-- TAB 1: OVERVIEW / DASHBOARD -->
+            <section v-if="activeTab === 'overview'" class="space-y-6">
+                <!-- Hero Banner -->
+                <div class="bg-gradient-to-r from-emerald-800 via-teal-800 to-indigo-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="max-w-3xl relative z-10 space-y-3">
+                        <span class="inline-block px-3 py-1 bg-emerald-500/30 text-emerald-200 rounded-full text-xs font-medium backdrop-blur-sm border border-emerald-400/20">
+                            Kurikulum Merdeka SMK • Konsentrasi RPL
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Dokumen Alur Tujuan Pembelajaran (ATP) Internal</h2>
+                        <p class="text-emerald-100/80 text-sm sm:text-base leading-relaxed">
+                            Dirancang khusus untuk menjamin penuntasan 4 Elemen CP Kemendikbud serta kesiapan penuh menghadapi <strong>UKK Nasional</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Core Indicators Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm flex items-start justify-between">
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Penuntasan CP Fase F</p>
+                            <h3 class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">100% S5</h3>
+                            <p class="text-xs text-slate-500 mt-1">Tuntas sebelum siswa PKL</p>
+                        </div>
+                        <div class="p-3 bg-emerald-50 dark:bg-emerald-950/50 rounded-lg text-emerald-600 dark:text-emerald-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm flex items-start justify-between">
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Model PKL</p>
+                            <h3 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mt-1">1 Sem Full</h3>
+                            <p class="text-xs text-slate-500 mt-1">Di Kelas XII Semester 6</p>
+                        </div>
+                        <div class="p-3 bg-indigo-50 dark:bg-indigo-950/50 rounded-lg text-indigo-600 dark:text-indigo-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm flex items-start justify-between">
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Core Stack Industri</p>
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Node + React</h3>
+                            <p class="text-xs text-slate-500 mt-1">PostgreSQL + React Native</p>
+                        </div>
+                        <div class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm flex items-start justify-between">
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Fokus UKK</p>
+                            <h3 class="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">Drill S5</h3>
+                            <p class="text-xs text-slate-500 mt-1">Template + Simulasi Soal</p>
+                        </div>
+                        <div class="p-3 bg-amber-50 dark:bg-amber-950/50 rounded-lg text-amber-600 dark:text-amber-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CP Status Summary Table -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Status Penuntasan 4 Elemen CP Kemendikbud</h3>
+                            <p class="text-xs text-slate-500">Semua elemen tuntas 100% pada Kelas XII Semester 5 sebelum keberangkatan PKL.</p>
+                        </div>
+                        <span class="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-xs font-semibold rounded-full">
+                            Tuntas Sebelum PKL
+                        </span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 text-xs uppercase font-semibold">
+                                <tr>
+                                    <th class="px-6 py-3">Elemen CP Resmi</th>
+                                    <th class="px-6 py-3">Target Semester Penuntasan</th>
+                                    <th class="px-6 py-3">Modul / Teknologi Kunci</th>
+                                    <th class="px-6 py-3">Relevansi UKK Nasional</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                                <tr v-for="cp in cpSummary" :key="cp.id" class="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition">
+                                    <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                                            {{ cp.title }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                            {{ cp.targetSemester }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-xs text-slate-600 dark:text-slate-300">
+                                        {{ cp.modules }}
+                                    </td>
+                                    <td class="px-6 py-4 text-xs">
+                                        <span class="text-amber-700 dark:text-amber-300 font-medium">
+                                            {{ cp.ukkRelevance }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: ATP ROADMAP PER SEMESTER -->
+            <section v-if="activeTab === 'roadmap'" class="space-y-6">
+                <!-- Filter Header & Search -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 no-print">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Alur Tujuan Pembelajaran (ATP) Per Semester</h2>
+                        <p class="text-xs text-slate-500">Pilih semester untuk melihat rincian Tujuan Pembelajaran (TP) dan modulnya.</p>
+                    </div>
+
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
+                        <button v-for="sem in semesters" :key="sem.id"
+                            @click="selectedSemId = sem.id"
+                            :class="selectedSemId === sem.id ? 'bg-emerald-600 text-white font-semibold' : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 hover:bg-slate-200'"
+                            class="px-3 py-1.5 rounded-lg text-xs transition whitespace-nowrap">
+                            {{ sem.shortName }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Semester Details Card -->
+                <div class="space-y-6">
+                    <div v-for="sem in filteredSemesters" :key="sem.id" class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <!-- Semester Header -->
+                        <div class="p-6 border-b border-slate-200 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-4" :class="sem.bgHeader">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wider bg-slate-900 text-white dark:bg-white dark:text-slate-900">
+                                        {{ sem.classLevel }}
+                                    </span>
+                                    <span class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded">
+                                        {{ sem.fase }}
+                                    </span>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-1">{{ sem.fullName }}</h3>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-0.5">{{ sem.focusNote }}</p>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-medium px-3 py-1.5 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm text-slate-700 dark:text-slate-300">
+                                    Output Utama: <strong>{{ sem.primaryOutput }}</strong>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- TP Items List -->
+                        <div class="p-6 space-y-4">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Daftar Tujuan Pembelajaran (TP):</h4>
+                            
+                            <div class="grid grid-cols-1 gap-4">
+                                <div v-for="tp in sem.tps" :key="tp.code" class="p-4 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/50 dark:bg-slate-800/50 hover:border-emerald-500/50 transition">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="px-2 py-0.5 bg-emerald-600 text-white text-xs font-mono font-bold rounded">
+                                                    {{ tp.code }}
+                                                </span>
+                                                <span class="text-xs font-semibold px-2 py-0.5 rounded bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+                                                    {{ tp.elementCP }}
+                                                </span>
+                                            </div>
+                                            <p class="text-sm font-medium text-slate-900 dark:text-slate-100 leading-snug">
+                                                {{ tp.description }}
+                                            </p>
+                                        </div>
+
+                                        <span v-if="tp.ukkRelevance" class="hidden sm:inline-block px-2.5 py-1 bg-amber-50 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 text-[10px] font-bold rounded border border-amber-200 dark:border-amber-800 whitespace-nowrap">
+                                            Inti UKK
+                                        </span>
+                                    </div>
+
+                                    <!-- Topics & Tools -->
+                                    <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-700/60 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-2">
+                                        <div class="flex flex-wrap gap-1">
+                                            <span v-for="tool in tp.tools" :key="tool" class="px-2 py-0.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded text-[11px]">
+                                                #{{ tool }}
+                                            </span>
+                                        </div>
+                                        <span class="italic text-slate-400">Bukti: {{ tp.evidence }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: MATRIKS CP RESMI -->
+            <section v-if="activeTab === 'cp-mapping'" class="space-y-6">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Matriks Pemetaan CP Resmi BSKAP / Kemendikbud</h2>
+                        <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                            Memastikan setiap paragraf Capaian Pembelajaran (CP) Konsentrasi Keahlian RPL Fase F terpetakan ke dalam alur semester internal.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div v-for="cp in cpDetails" :key="cp.id" class="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+                            <div class="p-4 bg-slate-100 dark:bg-slate-700/50 flex items-center justify-between">
+                                <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                                    Elemen {{ cp.id }}: {{ cp.name }}
+                                </h3>
+                                <span class="px-2.5 py-1 bg-emerald-600 text-white text-xs font-semibold rounded">
+                                    Target: {{ cp.targetSemester }}
+                                </span>
+                            </div>
+
+                            <div class="p-4 space-y-3 bg-white dark:bg-slate-800">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Teks Resmi Capaian Pembelajaran (CP):</p>
+                                    <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 italic bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 mt-1">
+                                        "{{ cp.officialText }}"
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Implementasi Tujuan Pembelajaran (TP):</p>
+                                    <ul class="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+                                        <li v-for="tp in cp.mappedTPs" :key="tp" class="flex items-start gap-2">
+                                            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            <span>{{ tp }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: KESIAPAN UKK NASIONAL -->
+            <section v-if="activeTab === 'ukk-drill'" class="space-y-6">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Strategi & Checklist Kesiapan UKK Nasional</h2>
+                        <p class="text-xs text-slate-500 mt-1">
+                            Uji Kompetensi Keahlian (UKK) menguji 5 fitur inti. Fitur ini sudah dilatih secara refleks pada Semester 3, 4, dan di-drill pada Semester 5.
+                        </p>
+                    </div>
+
+                    <!-- Checklist Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div v-for="item in ukkChecklist" :key="item.id" class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 flex items-start gap-3">
+                            <div class="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 font-bold text-xs">
+                                #{{ item.id }}
+                            </div>
+                            <div class="space-y-1">
+                                <h4 class="text-sm font-bold text-slate-900 dark:text-white">{{ item.title }}</h4>
+                                <p class="text-xs text-slate-600 dark:text-slate-400">{{ item.desc }}</p>
+                                <div class="pt-2 flex items-center gap-2 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                                    <span>Modul: {{ item.module }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Starter Boilerplate Strategy -->
+                    <div class="p-5 rounded-xl bg-gradient-to-r from-amber-500/10 to-emerald-500/10 border border-amber-500/30 space-y-2">
+                        <h3 class="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+                            <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Strategi Boilerplate / Starter Code (Semester 5)
+                        </h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            Pada Semester 5, sebelum berangkat PKL, siswa dilatih membiasakan diri menggunakan <em>starter repository</em> (Node.js Express REST API + React Vite + Tailwind). Hal ini memangkas waktu setup saat hari-H Ujian UKK sehingga siswa dapat fokus menyelesaikan logika transaksi dan cetak laporan.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-xs text-slate-500 no-print mt-auto">
+            <div class="max-w-7xl mx-auto px-4">
+                <p>Dokumen Kurikulum Internal & ATP RPL SMKN 1 Air Naningan • Kurikulum Merdeka</p>
+                <p class="text-slate-400 mt-1">Disusun untuk Penuntasan CP sebelum PKL Semester 6 & Sukses UKK Nasional</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        const { createApp, ref, computed } = Vue;
+
+        createApp({
+            setup() {
+                const activeTab = ref('overview');
+                const selectedSemId = ref('all');
+                const darkMode = ref(false);
+
+                const toggleDarkMode = () => {
+                    darkMode.value = !darkMode.value;
+                    if (darkMode.value) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                };
+
+                // Summary CP List
+                const cpSummary = ref([
+                    { id: 1, title: 'Basis Data', targetSemester: 'Kelas XI - S3', modules: 'PostgreSQL, ERD, Normalisasi, DDL/DML, Relasi JOIN', ukkRelevance: 'Wajib (Tabel & Relasi Data)' },
+                    { id: 2, title: 'Pemrograman Teks & OOP', targetSemester: 'Kelas X - S2 & XI - S4', modules: 'JS/TS, Class, Object, DOM, GUI Component UI', ukkRelevance: 'Wajib (Antarmuka & Logika App)' },
+                    { id: 3, title: 'Pemrograman Web', targetSemester: 'Kelas XI - S3 & S4', modules: 'Node.js Express, REST API, React JS, JWT Auth', ukkRelevance: 'Wajib (Core Backend & Frontend)' },
+                    { id: 4, title: 'Perangkat Bergerak', targetSemester: 'Kelas XII - S5', modules: 'React Native (Expo), Mobile GUI, API Integration', ukkRelevance: 'Nilai Plus / Paket Mobile UKK' },
+                ]);
+
+                // Full ATP Semesters Data
+                const semesters = ref([
+                    {
+                        id: 's1',
+                        shortName: 'Kelas X (S1)',
+                        classLevel: 'Kelas X',
+                        fase: 'Fase E',
+                        fullName: 'Semester 1: Fundamentals of Web Structure & Tooling',
+                        focusNote: 'Dasar kerangka web dan alat kolaborasi pengembang.',
+                        primaryOutput: 'Landing Page Responsif & Repo GitHub',
+                        bgHeader: 'bg-emerald-500/10',
+                        tps: [
+                            { code: 'TP 1.1', elementCP: 'Pemrograman Web Dasar', description: 'Menerapkan struktur hirarki dokumen web menggunakan HTML5 standar industri.', tools: ['HTML5', 'Semantic Web'], evidence: 'Website Profil Sekolah', ukkRelevance: false },
+                            { code: 'TP 1.2', elementCP: 'Pemrograman Web Dasar', description: 'Menerapkan tata letak (layouting) web modern yang responsif menggunakan CSS3 (Flexbox & Grid).', tools: ['CSS3', 'Flexbox', 'Tailwind CSS'], evidence: 'Landing Page Responsif', ukkRelevance: false },
+                            { code: 'TP 1.3', elementCP: 'Tooling / Version Control', description: 'Mengoperasikan sistem kontrol versi kode (Version Control System) berbasis Git terminal dan repositori GitHub.', tools: ['Git', 'GitHub', 'Terminal'], evidence: 'Repositori Proyek Git', ukkRelevance: true }
+                        ]
+                    },
+                    {
+                        id: 's2',
+                        shortName: 'Kelas X (S2)',
+                        classLevel: 'Kelas X',
+                        fase: 'Fase E',
+                        fullName: 'Semester 2: Algoritma, DOM & Pemrograman Terstruktur',
+                        focusNote: 'Logika dasar perprograman, manipulasi antarmuka, dan OOP.',
+                        primaryOutput: 'Aplikasi Interaktif DOM (Kalkulator/To-Do)',
+                        bgHeader: 'bg-emerald-500/10',
+                        tps: [
+                            { code: 'TP 2.1', elementCP: 'Pemrograman Teks', description: 'Menerapkan logika dan algoritma pemrograman terstruktur menggunakan sintaks dasar JavaScript (Variabel, Perulangan, Function).', tools: ['JavaScript ES6'], evidence: 'Aplikasi Logika Sederhana', ukkRelevance: false },
+                            { code: 'TP 2.2', elementCP: 'Pemrograman Teks & GUI', description: 'Menerapkan manipulasi elemen antarmuka web (DOM Manipulation) dan penanganan peristiwa (event handling).', tools: ['DOM API', 'Event Listener'], evidence: 'Interaktif Web Form', ukkRelevance: true },
+                            { code: 'TP 2.3', elementCP: 'Pemrograman Teks & OOP', description: 'Menerapkan konsep dasar Pemrograman Berorientasi Objek (Class, Object, Encapsulation) pada JavaScript.', tools: ['JS OOP Class'], evidence: 'Modul Objek Berbasis Class', ukkRelevance: true }
+                        ]
+                    },
+                    {
+                        id: 's3',
+                        shortName: 'Kelas XI (S3)',
+                        classLevel: 'Kelas XI',
+                        fase: 'Fase F',
+                        fullName: 'Semester 3: Basis Data & Web Server-Side (Core UKK)',
+                        focusNote: 'Penuntasan Elemen Basis Data dan Web Server-Side.',
+                        primaryOutput: 'RESTful API Server + Auth JWT + DB Relasional',
+                        bgHeader: 'bg-indigo-500/10',
+                        tps: [
+                            { code: 'TP 3.1', elementCP: 'Basis Data', description: 'Merancang pemodelan basis data relasional (ERD) dan aturan normalisasi data (1NF–3NF).', tools: ['ERD Diagram', 'Normalisasi'], evidence: 'Dokumen ERD Sistem Kasir/POS', ukkRelevance: true },
+                            { code: 'TP 3.2', elementCP: 'Basis Data', description: 'Mengoperasikan perintah SQL (DDL, DML, JOIN, Indexing) pada DBMS PostgreSQL.', tools: ['PostgreSQL', 'pSql/DBeaver'], evidence: 'Database Schema & Query SQL', ukkRelevance: true },
+                            { code: 'TP 3.3', elementCP: 'Pemrograman Web', description: 'Menerapkan arsitektur web backend server-side berbasis Node.js menggunakan framework Express.js.', tools: ['Node.js', 'Express.js'], evidence: 'Modul Server HTTP API', ukkRelevance: true },
+                            { code: 'TP 3.4', elementCP: 'Pemrograman Web', description: 'Menerapkan mekanisme autentikasi & otorisasi pengguna (Hashing Bcrypt, JWT) dan Role-Based Access Control.', tools: ['Bcrypt', 'JWT', 'Middleware'], evidence: 'Sistem Login & Multi-role User', ukkRelevance: true },
+                            { code: 'TP 3.5', elementCP: 'Pemrograman Web', description: 'Menerapkan arsitektur RESTful API terintegrasi basis data PostgreSQL untuk melayani kebutuhan data aplikasi.', tools: ['REST API', 'Postman'], evidence: 'Dokumentasi REST API Complete', ukkRelevance: true }
+                        ]
+                    },
+                    {
+                        id: 's4',
+                        shortName: 'Kelas XI (S4)',
+                        classLevel: 'Kelas XI',
+                        fase: 'Fase F',
+                        fullName: 'Semester 4: Web Client-Side (React JS) & TypeScript',
+                        focusNote: 'Penuntasan Elemen Pemrograman Web Client-Side dan TypeScript.',
+                        primaryOutput: 'Dashboard Web App Full-Stack Terintegrasi API',
+                        bgHeader: 'bg-indigo-500/10',
+                        tps: [
+                            { code: 'TP 4.1', elementCP: 'Pemrograman Web', description: 'Merancang antarmuka berbasis komponen (Component-based GUI) menggunakan React JS, Tailwind CSS & Shadcn UI.', tools: ['React JS', 'Tailwind', 'Shadcn'], evidence: 'Antarmuka Dashboard Admin', ukkRelevance: true },
+                            { code: 'TP 4.2', elementCP: 'Pemrograman Web', description: 'Menerapkan integrasi konsumsi REST API pada aplikasi frontend menggunakan React Query / Axios.', tools: ['Axios', 'React Query'], evidence: 'Integrasi Data Live Client-Server', ukkRelevance: true },
+                            { code: 'TP 4.3', elementCP: 'Pemrograman Web & UKK', description: 'Menerapkan fitur pencarian, filter, pembaruan data (CRUD), dan cetak laporan (Export PDF/Excel).', tools: ['PDF Printer Library', 'Filter Logic'], evidence: 'Fitur Laporan Cetak Transaksi', ukkRelevance: true },
+                            { code: 'TP 4.4', elementCP: 'Pemrograman Teks/OOP', description: 'Menerapkan penguatan type-safety dan OOP lanjutan menggunakan TypeScript Fundamental.', tools: ['TypeScript'], evidence: 'Proyek React/Node Type-Safe', ukkRelevance: false }
+                        ]
+                    },
+                    {
+                        id: 's5',
+                        shortName: 'Kelas XII (S5)',
+                        classLevel: 'Kelas XII',
+                        fase: 'Fase F',
+                        fullName: 'Semester 5: Mobile Dev, Deployment & Drill UKK',
+                        focusNote: 'Penuntasan Elemen Perangkat Bergerak & Kesiapan UKK.',
+                        primaryOutput: 'Aplikasi Mobile + Starter Boilerplate UKK Ready',
+                        bgHeader: 'bg-amber-500/10',
+                        tps: [
+                            { code: 'TP 5.1', elementCP: 'Perangkat Bergerak', description: 'Mengoperasikan lingkungan pengembangan aplikasi mobile menggunakan React Native (Expo).', tools: ['React Native', 'Expo IDE'], evidence: 'Setup Environment Mobile', ukkRelevance: true },
+                            { code: 'TP 5.2', elementCP: 'Perangkat Bergerak', description: 'Menerapkan komponen antarmuka mobile GUI, navigasi layar, dan penyimpanan lokal.', tools: ['React Navigation', 'AsyncStorage'], evidence: 'Layout UI Mobile App', ukkRelevance: true },
+                            { code: 'TP 5.3', elementCP: 'Perangkat Bergerak', description: 'Menerapkan integrasi REST API server pada aplikasi mobile untuk pertukaran data real-time.', tools: ['Fetch API Mobile'], evidence: 'Mobile App Terkoneksi Backend', ukkRelevance: true },
+                            { code: 'TP 5.4', elementCP: 'Pengayaan Industri', description: 'Menerapkan prinsip DevOps dasar (Kontainerisasi Docker & Deployment VPS Linux).', tools: ['Docker', 'VPS Linux'], evidence: 'Web & API Live Deployed', ukkRelevance: false },
+                            { code: 'TP 5.5', elementCP: 'Integrasi UKK', description: 'Menganalisis kisi-kisi paket UKK Nasional dan menyusun boilerplate starter-code untuk simulasi ujian.', tools: ['Boilerplate Code'], evidence: 'Hasil Tryout UKK Simulasi', ukkRelevance: true }
+                        ]
+                    },
+                    {
+                        id: 's6',
+                        shortName: 'Kelas XII (S6)',
+                        classLevel: 'Kelas XII',
+                        fase: 'Fase F',
+                        fullName: 'Semester 6: PKL Full 1 Semester & Eksekusi UKK',
+                        focusNote: 'Praktik Kerja Lapangan di Industri & Kelulusan UKK.',
+                        primaryOutput: 'Sertifikat PKL Industri + Kelulusan UKK Nasional',
+                        bgHeader: 'bg-slate-500/10',
+                        tps: [
+                            { code: 'TP 6.1', elementCP: 'Praktik Kerja Lapangan', description: 'Menerapkan alur kerja profesional dan pengembangan perangkat lunak di tempat PKL mitra industri.', tools: ['Workplace / DU-DI'], evidence: 'Jurnal & Laporan PKL', ukkRelevance: false },
+                            { code: 'TP 6.2', elementCP: 'Uji Kompetensi Keahlian', description: 'Menampilkan demonstrasi kompetensi dan mempertahankan arsitektur program di hadapan penguji UKK.', tools: ['Code Defense', 'Presentation'], evidence: 'Sertifikat Kompetensi UKK', ukkRelevance: true }
+                        ]
+                    }
+                ]);
+
+                // Filtered Semesters computed
+                const filteredSemesters = computed(() => {
+                    if (selectedSemId.value === 'all') return semesters.value;
+                    return semesters.value.filter(s => s.id === selectedSemId.value);
+                });
+
+                // Detailed CP Text Mapping
+                const cpDetails = ref([
+                    {
+                        id: '1',
+                        name: 'Basis Data',
+                        targetSemester: 'Kelas XI (Semester 3)',
+                        officialText: 'Pada akhir Fase F, peserta didik mampu menerapkan perancangan dan pembuatan basis data serta penggunaan SQL (Structured Query Language).',
+                        mappedTPs: [
+                            'TP 3.1: Merancang pemodelan basis data relasional (ERD) dan normalisasi 1NF–3NF.',
+                            'TP 3.2: Mengoperasikan DDL, DML, JOIN, dan Indexing SQL pada DBMS PostgreSQL.'
+                        ]
+                    },
+                    {
+                        id: '2',
+                        name: 'Pemrograman Berbasis Teks, Grafis, dan Multimedia',
+                        targetSemester: 'Kelas X (S2) & XI (S4)',
+                        officialText: 'Pada akhir Fase F, peserta didik mampu menerapkan perintah eksekusi bahasa pemrograman yang mengimplementasikan pemrograman terstruktur, Pemrograman Berorientasi Objek (OOP) lanjutan, pemodelan perangkat lunak, pemrograman antarmuka GUI, dan pemanfaatan pustaka (library).',
+                        mappedTPs: [
+                            'TP 2.1 & 2.3: Pemrograman terstruktur dan OOP Class pada JavaScript.',
+                            'TP 4.1 & 4.4: Pemrograman antarmuka GUI berbasis komponen (React JS) & TypeScript.'
+                        ]
+                    },
+                    {
+                        id: '3',
+                        name: 'Pemrograman Web',
+                        targetSemester: 'Kelas XI (Semester 3 & 4)',
+                        officialText: 'Pada akhir Fase F, peserta didik mampu menerapkan bahasa pemrograman server-side, framework, dan pendokumentasian pada pembuatan web statis dan dinamis untuk beragam kebutuhan yang kontekstual.',
+                        mappedTPs: [
+                            'TP 3.3, 3.4, & 3.5: Web Server-side Node.js Express, Autentikasi JWT & REST API.',
+                            'TP 4.1 & 4.2: Web Client-side React JS, Axios, dan React Query integration.'
+                        ]
+                    },
+                    {
+                        id: '4',
+                        name: 'Pemrograman Perangkat Bergerak',
+                        targetSemester: 'Kelas XII (Semester 5)',
+                        officialText: 'Pada akhir Fase F, peserta didik mampu menerapkan bahasa pemrograman bergerak, IDE, framework, basis data, API, dan pendokumentasian pada aplikasi perangkat bergerak untuk beragam kebutuhan yang kontekstual.',
+                        mappedTPs: [
+                            'TP 5.1 & 5.2: React Native (Expo IDE) Mobile GUI & Navigation.',
+                            'TP 5.3: Integrasi REST API server ke dalam aplikasi perangkat bergerak.'
+                        ]
+                    }
+                ]);
+
+                // UKK Checklist Modules
+                const ukkChecklist = ref([
+                    { id: 1, title: 'Rancangan Relasi Database (ERD & SQL)', desc: 'Membuat tabel, Primary/Foreign Key, serta query JOIN relasi data transaksi.', module: 'Kelas XI - S3 (PostgreSQL)' },
+                    { id: 2, title: 'Autentikasi & Multi-Role Access Control', desc: 'Sistem login aman dengan Bcrypt password hash, JWT token, dan pembagian hak akses admin/petugas/user.', module: 'Kelas XI - S3 (Node.js JWT)' },
+                    { id: 3, title: 'Fitur Transaksi & Pengolahan Data (CRUD)', desc: 'Form input, edit, hapus, validasi data, serta manipulasi stok/transaksi secara akurat.', module: 'Kelas XI - S4 (React JS)' },
+                    { id: 4, title: 'Fitur Cetak Laporan (PDF / Print View)', desc: 'Fitur mencetak rekapitulasi data transaksi berdasarkan tanggal/filter ke format PDF atau cetak fisik.', module: 'Kelas XI - S4 (React Component Print)' },
+                    { id: 5, title: 'Aplikasi Client Mobile (Akses API)', desc: 'Aplikasi smartphone untuk akses petugas/user dalam melihat status transaksi secara fleksibel.', module: 'Kelas XII - S5 (React Native Expo)' }
+                ]);
+
+                return {
+                    activeTab,
+                    selectedSemId,
+                    darkMode,
+                    toggleDarkMode,
+                    cpSummary,
+                    semesters,
+                    filteredSemesters,
+                    cpDetails,
+                    ukkChecklist
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
